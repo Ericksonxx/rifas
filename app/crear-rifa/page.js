@@ -86,13 +86,6 @@ function CrearRifa() {
                         type='text'
                         placeholder='Fecha del sorteo (04-12-23)'
                     />
-                    <p>Como se elegira al ganador?</p>
-                    <input
-                        onChange={(e) => setTitulo(e.target.value)}
-                        className='border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
-                        type='text'
-                        placeholder='Cupon ONCE, Sorteo en directo...'
-                    />
                     <textarea
                         rows='3'
                         onChange={(e) => setBio(e.target.value)}
@@ -100,8 +93,15 @@ function CrearRifa() {
                         type='text'
                         placeholder='Descripcion'
                     />
+                    <p className='font-semibold text-xl text-[#9381ff] mt-12'>Como se elegira al ganador?</p>
+                    <input
+                        onChange={(e) => setTitulo(e.target.value)}
+                        className='border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
+                        type='text'
+                        placeholder='Cupon ONCE, Sorteo en directo...'
+                    />
                     <div className='my-4'>
-                        <p className='font-semibold text-xl text-[#9381ff]'>El Premio</p>
+                        <p className='font-semibold text-xl text-[#9381ff] mt-12'>El Premio</p>
                         <hr />
                     </div>
                     <input
@@ -133,6 +133,10 @@ function CrearRifa() {
                         accept="image/png, image/gif, image/jpeg"
                         className="hidden"
                     />
+                    
+                </div>
+                <div className='mt-5 mb-32'>
+                    <button className='mt-4 mb-36 text-center bg-[#9381ff] w-full text-[#f8f7ff] py-4 rounded shadow font-semibold text-xl'>Crear Rifa</button>
                 </div>
             </div>
         </div>
