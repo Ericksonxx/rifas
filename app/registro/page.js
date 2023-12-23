@@ -26,11 +26,14 @@ export default function App() {
 
   // Router instance
   const router = useRouter();
+  let storedImageUrl 
 
   // Local storage setup
   const defaultImageUrl = 'https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=';
-  const storedImageUrl = localStorage.getItem('uploadedImage') || defaultImageUrl;
-
+  if (typeof window !== 'undefined') {
+    storedImageUrl = localStorage.getItem('uploadedImage') || defaultImageUrl;
+  }
+  
   // Function to fetch user details
   async function getUser() {
     try {
@@ -60,7 +63,9 @@ export default function App() {
       if (error) {
         console.error('Error uploading file:', error.message);
       } else {
-        localStorage.setItem('uploadedImage', data.fullPath);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('uploadedImage', data.fullPath);
+        }
         setImageId(data.id);
         setImageUrl(data.fullPath);
       }
@@ -78,17 +83,20 @@ export default function App() {
     if(error) {
       console.log(error)
     } else {
-      let { data, error } = await supabase.auth.updateUser({
-        data : {
-          image: localStorage.getItem('uploadedImage'),
-          nombre: nombre,
-          prefix: selectedFlag,
-          tel: phone,
-          bio: bio,
-        }
-      })
-      router.push('/')
-    }
+      if (typeof window !== 'undefined') {
+        let { data, error } = await supabase.auth.updateUser({
+          data : {
+            image: localStorage.getItem('uploadedImage'),
+            nombre: nombre,
+            prefix: selectedFlag,
+            tel: phone,
+            bio: bio,
+          }
+        })
+        router.push('/')
+      }
+      }
+      
   };
   
 

@@ -22,10 +22,13 @@ function CrearRifa() {
       const [descripcion, setDescripcion] = useState('')
       const [imageId, setImageId] = useState('');
       const [imageUrl, setImageUrl] = useState('');
+      let storedImageUrl
 
         // Local storage setup
   const defaultImageUrl = 'https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=';
-  const storedImageUrl = localStorage.getItem('uploadedFoto') || defaultImageUrl;
+  if (typeof window !== 'undefined') {
+    storedImageUrl =  localStorage.getItem('uploadedFoto') 
+ } else { defaultImageUrl}
 
 
   
@@ -53,7 +56,10 @@ function CrearRifa() {
           if (error) {
             console.error('Error uploading file:', error.message);
           } else {
-            localStorage.setItem('uploadedFoto', data.fullPath);
+            if (typeof window !== 'undefined') {
+                localStorage.setItem('uploadedFoto', data.fullPath);
+            }
+            
             setImageId(data.id);
             setImageUrl(data.fullPath);
           }
