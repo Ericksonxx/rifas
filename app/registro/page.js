@@ -32,7 +32,12 @@ export default function App() {
   const defaultImageUrl = 'https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=';
   if (typeof window !== 'undefined') {
     storedImageUrl = localStorage.getItem('uploadedImage') || defaultImageUrl;
+    console.log(storedImageUrl)
   }
+
+  useState(() => {
+    console.log(storedImageUrl)
+  },[storedImageUrl])
   
   // Function to fetch user details
   async function getUser() {
@@ -68,6 +73,7 @@ export default function App() {
         }
         setImageId(data.id);
         setImageUrl(data.fullPath);
+        console.log('FULL PATH: ', data.fullPath)
       }
     } else {
       console.error('No file selected for upload.');

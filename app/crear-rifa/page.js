@@ -19,17 +19,38 @@ function CrearRifa() {
       const [session, setSession] = useState(null);
       //fields
       const [titulo, setTitulo] = useState('')
+      const [fecha, setFecha] = useState('')
+      const [precio, setPrecio] = useState('')
       const [descripcion, setDescripcion] = useState('')
-      const [imageId, setImageId] = useState('');
+      const [referencia, setReferencia] = useState('')
+      const [premio, setPremio] = useState('')
+      const [valor, setValor] = useState('')
+      const [dbImage, setDbImage] = useState('')
       const [imageUrl, setImageUrl] = useState('');
+
+
+      const [imageId, setImageId] = useState('');
+    
+      //nueva rifa
+      async function nuevaRifa() {
+
+      }
+
+
+
+
+
+
+
       let storedImageUrl
 
         // Local storage setup
   const defaultImageUrl = 'https://media.istockphoto.com/id/1248723171/vector/camera-photo-upload-icon-on-isolated-white-background-eps-10-vector.jpg?s=612x612&w=0&k=20&c=e-OBJ2jbB-W_vfEwNCip4PW4DqhHGXYMtC3K_mzOac0=';
   if (typeof window !== 'undefined') {
     storedImageUrl =  localStorage.getItem('uploadedFoto') 
+    console.log()
  } else { defaultImageUrl}
-
+  
 
   
   //get user
@@ -56,17 +77,48 @@ function CrearRifa() {
           if (error) {
             console.error('Error uploading file:', error.message);
           } else {
+            console.log('subido: ', data)
             if (typeof window !== 'undefined') {
-                localStorage.setItem('uploadedFoto', data.fullPath);
+                localStorage.setItem('uploadedFoto', `https://ujcygzxrfutcztvtxlki.supabase.co/storage/v1/object/public/avatar/${data.path}`);
             }
             
             setImageId(data.id);
-            setImageUrl(data.fullPath);
+            setImageUrl(`https://ujcygzxrfutcztvtxlki.supabase.co/storage/v1/object/public/avatar/${data.path}`);
+            console.log('IMAGEURL: ',imageUrl)
           }
         } else {
           console.error('No file selected for upload.');
         }
       };
+
+
+      //crear rifa
+      async function crearRifa() {
+        if(titulo && fecha && precio && premio && referencia != '') {
+            const { data, error } = await supabase
+            .from('rifas')
+            .insert([{ 
+                titulo: titulo, 
+                premio: premio,
+                foto_premio: imageUrl,
+                valorado: valor,
+                descripcion: descripcion,
+                fecha_fin: fecha,
+                referencia: referencia,
+                owner: session.id,
+                precio: precio
+
+            },])
+            .select()
+            if(error) {
+                console.log(error)
+            } else {
+                router.push('/')
+            }
+        } else {
+            alert('falta info')
+        }
+      }
 
 
 
@@ -79,55 +131,72 @@ function CrearRifa() {
                 <div className='my-6'>
                     <p className='font-semibold text-2xl text-[#9381ff]'>Nueva rifa en {session.user_metadata.nombre}</p>
                 </div>
-                <div className='border-2 border-[#9381ff] p-2'>
+                <div className=''>
                     <input
                         onChange={(e) => setTitulo(e.target.value)}
                         className='font-semibold border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
                         type='text'
                         placeholder='Titulo de la rifa'
                     />
+                    <div className='grid grid-cols-2 my-4'>
+                        <p className=' flex items-end mb-[10px] text-[#9381ff]  text-xl'>Fecha de la rifa:</p>
                     <input
-                        onChange={(e) => setTitulo(e.target.value)}
-                        className='border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
-                        type='text'
-                        placeholder='Fecha del sorteo (04-12-23)'
+                        onChange={(e) => setFecha(e.target.value)}
+                        className='w-full px-2 py-2 text-lg mt-4 text-gray-400'
+                        type='date'
+                        placeholder='Fecha'
                     />
+                    </div>
+                    <div className='grid grid-cols-2 my-4'>
+                        <p className='flex items-end mb-[10px] text-[#9381ff]  text-xl'>Precio:</p>
+                        <div className='relative w-full'>
+                            <div className='relative w-full flex items-center'>
+                                <input
+                                    onChange={(e) => setPrecio(e.target.value)}
+                                    className='w-full px-10 py-2 text-lg border-b-[#9381ff] border-b-2 text-[#9381ff] focus:outline-none'
+                                    type='number'
+                                    placeholder='0'
+                                    value={precio}
+                                />
+                                <span className='ml-2 text-[#9381ff]'>EUR</span>
+                            </div>
+                        </div>
+                    </div>
                     <textarea
                         rows='3'
-                        onChange={(e) => setBio(e.target.value)}
+                        onChange={(e) => setDescripcion(e.target.value)}
                         className='border-[#9381ff] border-2 rounded w-full px-2 py-2 text-md mt-4'
                         type='text'
                         placeholder='Descripcion'
                     />
-                    <p className='font-semibold text-xl text-[#9381ff] mt-12'>Como se elegira al ganador?</p>
+                    <p className=' text-xl text-[#9381ff] mt-12'>Como se elegira al ganador?</p>
                     <input
-                        onChange={(e) => setTitulo(e.target.value)}
-                        className='border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
+                        onChange={(e) => setReferencia(e.target.value)}
+                        className='border-b-[#9381ff] border-b-2 w-full px-2 pb-2 text-lg mt-4'
                         type='text'
                         placeholder='Cupon ONCE, Sorteo en directo...'
                     />
-                    <div className='my-4'>
-                        <p className='font-semibold text-xl text-[#9381ff] mt-12'>El Premio</p>
-                        <hr />
-                    </div>
+
                     <input
-                        onChange={(e) => setTitulo(e.target.value)}
+                        onChange={(e) => setPremio(e.target.value)}
                         className='mb-4 border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
                         type='text'
                         placeholder='Que se rifa?'
                     />
                     <input
-                        onChange={(e) => setTitulo(e.target.value)}
+                        onChange={(e) => setValor(e.target.value)}
                         className='mb-4 border-b-[#9381ff] border-b-2 w-full px-2 py-2 text-lg mt-4'
                         type='numerical'
                         placeholder='En cuanto esta valorado el premio?'
                     />
-                    <img
-                        className='border-2 rounded border-[#9381ff]'
-                        style={{ margin: 'auto', width: '100%', height: '200px', objectFit: 'cover' }}
-                        src={imageUrl || storedImageUrl}
-                        alt='Foto Premio'
-                    />
+                    {imageUrl && 
+                                        <img
+                                        className='border-2 rounded border-[#9381ff]'
+                                        style={{ margin: 'auto', width: '100%', height: '200px', objectFit: 'cover' }}
+                                        src={imageUrl}
+                                        alt='Foto Premio'
+                                    />
+                    }
                     <label htmlFor="myImage" className="mt-4 cursor-pointer bg-blue-500 text-white py-2 px-4 rounded-full inline-block">
                         Anadir foto del premio
                     </label>
@@ -142,7 +211,7 @@ function CrearRifa() {
                     
                 </div>
                 <div className='mt-5 mb-32'>
-                    <button className='mt-4 mb-36 text-center bg-[#9381ff] w-full text-[#f8f7ff] py-4 rounded shadow font-semibold text-xl'>Crear Rifa</button>
+                    <button onClick={crearRifa} className='mt-4 mb-36 text-center bg-[#9381ff] w-full text-[#f8f7ff] py-4 rounded shadow font-semibold text-xl'>Crear Rifa</button>
                 </div>
             </div>
         </div>
