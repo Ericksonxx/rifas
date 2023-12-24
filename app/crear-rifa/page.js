@@ -27,6 +27,7 @@ function CrearRifa() {
       const [valor, setValor] = useState('')
       const [dbImage, setDbImage] = useState('')
       const [imageUrl, setImageUrl] = useState('');
+      const [numeros, setNumeros] = useState('')
 
 
       const [imageId, setImageId] = useState('');
@@ -92,9 +93,22 @@ function CrearRifa() {
       };
 
 
+  const handleDateChange = (e) => {
+    const selectedDate = e.target.value;
+    // Format the date to "dd-mm-yyyy"
+    const formattedDate = formatDate(selectedDate);
+    setFecha(formattedDate);
+  };
+
+  const formatDate = (dateString) => {
+    const [year, month, day] = dateString.split('-');
+    return `${day}-${month}-${year}`;
+  };
+
+
       //crear rifa
       async function crearRifa() {
-        if(titulo && fecha && precio && premio && referencia != '') {
+        if(titulo && fecha && precio && premio && referencia && numeros != '') {
             const { data, error } = await supabase
             .from('rifas')
             .insert([{ 
@@ -106,7 +120,9 @@ function CrearRifa() {
                 fecha_fin: fecha,
                 referencia: referencia,
                 owner: session.id,
-                precio: precio
+                precio: precio,
+                owner_name: session.user_metadata.nombre,
+                numeros: numeros
 
             },])
             .select()
@@ -159,6 +175,19 @@ function CrearRifa() {
                                     value={precio}
                                 />
                                 <span className='ml-2 text-[#9381ff]'>EUR</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className='my-4'>
+                        <p className='flex items-end mb-[10px] text-[#9381ff]  text-xl'>Cuantos numeros se sortean:</p>
+                        <div className='relative w-full'>
+                            <div className='relative w-full flex items-center'>
+                                <input
+                                    onChange={(e) => setNumeros(e.target.value)}
+                                    className='w-full px-10 py-2 text-lg border-b-[#9381ff] border-b-2 text-[#9381ff] focus:outline-none'
+                                    type='number'
+                                    placeholder='0'
+                                />
                             </div>
                         </div>
                     </div>

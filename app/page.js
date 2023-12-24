@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
-
+import Link from 'next/link';
 //comps
 import Nav from './comps/Nav'
 
@@ -19,6 +19,7 @@ export default function Home() {
   const [session, setSession] = useState(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rifas, setRifas] = useState()
 
   //get user
   async function getUser() {
@@ -28,6 +29,22 @@ export default function Home() {
   useEffect(() => {
     getUser()
   }, []);
+
+
+  //get rifas
+  async function getRifas() {
+    let { data: rifas, error } = await supabase
+    .from('rifas')
+    .select('*')
+    if(error) {
+      console.log(error)
+    } else {
+      setRifas(rifas)
+    }
+  }
+  useEffect(() => {
+    getRifas()
+  },[])
 
   
 
@@ -62,6 +79,22 @@ export default function Home() {
           <Nav superbase={supabase} session={session} />
           <div className='my-8 mx-4'>
             <button onClick={() => router.push('/crear-rifa')} className='bg-[#9381ff] px-4 py-2 rounded shadow shadow-md text-[#f8f7ff] text-sm font-semibold'>+ CREAR NUEVA RIFA</button>
+          </div>
+          <div>
+            {rifas &&
+              <div>
+                  {rifas.map((rifa,i) => {
+                    return(
+                      <div key={i} className='border-[#9381ff] border-2 w-[80%] m-auto px-2 py-4 rounded shadow shadow-xl'>
+                          <Link key={rifa.id} href="[rifaId]" as={`${rifa.id}` }>
+                              <p className='text-[#9381ff] font-semibold text-xl'>{rifa.titulo}</p>
+                              <img src={rifa.foto_premio} /> 
+                          </Link>
+                      </div>
+                    )
+                  })}
+              </div>
+            }
           </div>
       </div>
       }
