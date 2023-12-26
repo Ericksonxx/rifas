@@ -126,7 +126,7 @@ async function getTaken() {
             </div>
           )}
           {/* Create buttons dynamically */}
-          <div className='border-4 rounded shadow-xl border-[#9381ff] h-[60vh] overflow-y-scroll'>
+          <div className='border-4 rounded shadow-xl border-[#9381ff] h-[70vh] overflow-y-scroll'>
           <div className='flex flex-wrap mt-4 pb-[50px]'>
             {Array.from({ length: totalNumbers }, (_, index) => index + 1).map((number) => (
               <button
@@ -147,7 +147,7 @@ async function getTaken() {
           {selectedNumbers.length > 0 && (
             <div>
               {!details && 
-                <div className='w-full mt-6 fixed bottom-[180px] left-0'>
+                <div className='w-full mt-6 fixed bottom-0 left-0'>
                   <button className='bg-[#9381ff] text-[#f8f7ff] w-full px-4 py-6 font-semibold text-xl text-center shadow shadow-lg tex' onClick={() => openDetails()}>
                     Reservar
                   </button>

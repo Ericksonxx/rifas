@@ -96,7 +96,7 @@ export default function Home() {
           </div>
           <div>
             {rifas &&
-              <div>
+              <div className=''>
                   {rifas.map((rifa,i) => {
                       //delete
                       async function deleteRifa() {
@@ -108,11 +108,12 @@ export default function Home() {
                               console.log(error)
                           } else {
                             getRifas()
+                            return
                           }
                         }
 
                     return(
-                      <div key={i} className='border-[#9381ff] border-2 w-[80%] m-auto pt-4 rounded shadow shadow-xl'>
+                      <div key={i} className='my-4 border-[#9381ff] border-2 w-[80%] m-auto pt-4 rounded shadow shadow-xl'>
                           <Link key={rifa.id} href="[rifaId]" as={`${rifa.id}` }>
                               <p className='px-2 text-[#9381ff] font-semibold text-xl'>{rifa.titulo}</p>
                               <img className='px-2 my-2' src={rifa.foto_premio} /> 
