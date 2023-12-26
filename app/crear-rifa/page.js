@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { uuid } from 'uuidv4';
+
 import Link from 'next/link';
 //comps
 import Nav from '../comps/Nav'
@@ -28,7 +29,8 @@ function CrearRifa() {
       const [dbImage, setDbImage] = useState('')
       const [imageUrl, setImageUrl] = useState('');
       const [numeros, setNumeros] = useState('')
-
+      const [screenCreada, setScreenCreada] = useState(false)
+      const [newRifaId, setNewRifaId] = useState('')
 
       const [imageId, setImageId] = useState('');
     
@@ -129,12 +131,24 @@ function CrearRifa() {
             if(error) {
                 console.log(error)
             } else {
-                router.push('/user')
+                const domain = window.location.origin
+                const id = data[0].id
+                setNewRifaId(domain+'/'+id)
+                setScreenCreada(true)
             }
         } else {
             alert('falta info')
         }
       }
+
+      //copy url
+      const handleCopyClick = () => {
+        const string = newRifaId.toString()
+          string.select();
+          document.execCommand('copy');
+          window.getSelection().removeAllRanges();
+          alert('Text copied to clipboard!');
+      };
 
 
 
@@ -142,7 +156,29 @@ function CrearRifa() {
   if(supabase && session) {
     return (
         <div>
-            <Nav supabase={supabase} session={session} />
+            {screenCreada ?
+                (
+                    <div className='bg-[#9381ff] w-screen h-screen px-12 py-24'>
+                        <div>
+                            <p className='text-center mb-12 text-5xl'>✅</p>
+                            <p className='text-center text-[#f8f7ff] font-semibold text-3xl mb-4'>Comparte tu rifa para que los demas puedan participar</p>
+                            <p className='text-center  text-xl text-[#f8f7ff] font-light mb-12'>Copia esta URL o compartelo por redes sociales</p>
+                        </div>
+                        <div className='bg-gray-100 m-auto rounded shadow font-semibold text-gray-700'>
+                            <p className='px-4 py-2'>{newRifaId}</p>
+                            <button 
+                                className='bg-green-500 w-full font-semibold text-xl py-2 rounded shadow text-[#f8f7ff]'
+                                onClick={() => navigator.clipboard.writeText(newRifaId)}
+                            >
+                                COPIAR ENLACE
+                            </button>
+                        </div>
+                    </div>
+                )
+            :
+            (
+                <div>
+                                <Nav supabase={supabase} session={session} />
             <div className='w-[80%] mx-auto'>
                 <div className='my-6'>
                     <p className='font-semibold text-2xl text-[#9381ff]'>Nueva rifa en {session.user_metadata.nombre}</p>
@@ -243,6 +279,10 @@ function CrearRifa() {
                     <button onClick={crearRifa} className='mt-4 mb-36 text-center bg-[#9381ff] w-full text-[#f8f7ff] py-4 rounded shadow font-semibold text-xl'>Crear Rifa</button>
                 </div>
             </div>
+                </div>
+            )
+            }
+
         </div>
     );
   } else {
