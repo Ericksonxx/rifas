@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { uuid } from 'uuidv4';
+import Loader from 'rsuite/Loader';
 
 import Link from 'next/link';
 //comps
@@ -156,6 +157,7 @@ function CrearRifa() {
   if(supabase && session) {
     return (
         <div>
+            
             {screenCreada ?
                 (
                     <div className='bg-[#9381ff] w-screen h-screen px-12 py-24'>
@@ -178,8 +180,10 @@ function CrearRifa() {
             :
             (
                 <div>
-                                <Nav supabase={supabase} session={session} />
-            <div className='w-[80%] mx-auto'>
+            <div className='w-[80%] mx-auto mt-6'>
+                <button onClick={() => router.back()}>
+            <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/9381ff/back.png" alt="back"/>
+          </button>
                 <div className='my-6'>
                     <p className='font-semibold text-2xl text-[#9381ff]'>Nueva rifa en {session.user_metadata.nombre}</p>
                 </div>
@@ -287,7 +291,9 @@ function CrearRifa() {
     );
   } else {
     return(
-        <p>Error</p>
+        <div className='h-screen w-screen flex justify-center items-center text-center'>
+            <Loader />
+        </div>
     )
   }
 }

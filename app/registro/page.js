@@ -111,6 +111,9 @@ export default function App() {
     <div className='w-[90%] md:w-[50%] mx-auto my-12'>
       {session == null ? (
         <div>
+          <button onClick={() => router.back()}>
+            <img width="20" height="20" src="https://img.icons8.com/ios-filled/50/9381ff/back.png" alt="back"/>
+          </button>
           <div style={{ width: '100px', height: '100px', overflow: 'hidden', borderRadius: '50%', margin: 'auto' }}>
             <img
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
