@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import { uuid } from 'uuidv4';
-
+import Link from 'next/link';
 //comps
 import Nav from '../comps/Nav'
 

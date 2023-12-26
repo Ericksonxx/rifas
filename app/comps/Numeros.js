@@ -21,13 +21,14 @@ function Numeros({ rifa, supabase, setOpenNum, openNum}) {
   const handleNumberClick = (number) => {
     // Check if the number is already selected
     if (selectedNumbers.includes(number)) {
-      // If selected, remove it from the list
+      // If selected, remove it from the list (deselect)
       setSelectedNumbers((prevSelected) => prevSelected.filter((num) => num !== number));
     } else {
-      // If not selected, add it to the list
+      // If not selected, add it to the list (select)
       setSelectedNumbers((prevSelected) => [...prevSelected, number]);
     }
   };
+  
 
   //participacion nueva
   async function participar() {
@@ -76,7 +77,7 @@ async function getTaken() {
   useEffect(() => {
     console.log(taken);
   }, [taken]);
-  
+
 
 
   //open details
@@ -129,18 +130,19 @@ async function getTaken() {
           <div className='flex flex-wrap mt-4 pb-[50px]'>
             {Array.from({ length: totalNumbers }, (_, index) => index + 1).map((number) => (
               <button
-                key={number}
-                className={`${
-                  selectedNumbers.includes(number)
-                    ? 'bg-gray-400 text-gray-500 cursor-not-allowed'
-                    : 'bg-[#9381ff] text-white'
-                } px-4 py-2 m-2 rounded
-                ${taken.includes(number) && 'bg-red-400 text-gray-300 cursor-not-allowed '}`}
-                  onClick={() => handleNumberClick(number)}
-                  disabled={selectedNumbers.includes(number) || taken.includes(number)}
-              >
+              key={number}
+              className={`${
+                selectedNumbers.includes(number)
+                  ? 'bg-gray-400 text-gray-500 cursor-pointer'
+                  : 'bg-[#9381ff] text-white cursor-pointer'
+              } px-4 py-2 m-2 rounded
+              ${taken.includes(number) && 'bg-red-400 text-gray-300 cursor-not-allowed '}`}
+              onClick={() => handleNumberClick(number)}
+              disabled={taken.includes(number)}
+            >
               {number}
             </button>
+            
           ))}
           {selectedNumbers.length > 0 && (
             <div>
