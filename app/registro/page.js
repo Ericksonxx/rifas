@@ -69,11 +69,11 @@ export default function App() {
         console.error('Error uploading file:', error.message);
       } else {
         if (typeof window !== 'undefined') {
-          localStorage.setItem('uploadedImage', data.fullPath);
-        }
-        setImageId(data.id);
-        setImageUrl(data.fullPath);
-        console.log('FULL PATH: ', data.fullPath)
+          localStorage.setItem('uploadedFoto', `https://ujcygzxrfutcztvtxlki.supabase.co/storage/v1/object/public/avatar/${data.path}`);
+      }
+      setImageId(data.id);
+      setImageUrl(`https://ujcygzxrfutcztvtxlki.supabase.co/storage/v1/object/public/avatar/${data.path}`);
+      console.log('IMAGEURL: ',imageUrl)
       }
     } else {
       console.error('No file selected for upload.');
@@ -114,7 +114,7 @@ export default function App() {
           <div style={{ width: '100px', height: '100px', overflow: 'hidden', borderRadius: '50%', margin: 'auto' }}>
             <img
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              src={imageUrl || storedImageUrl}
+              src={imageUrl}
               alt='Uploaded Avatar'
             />
           </div>

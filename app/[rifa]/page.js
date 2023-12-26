@@ -2,11 +2,18 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 //comps
 import Numeros from '../comps/Numeros'
+import { Router } from 'next/router';
 
 
 function Rifa({params}) {
+
+      // Router instance
+      const router = useRouter();
+
+
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPA_URL
   const supabaseKey = process.env.NEXT_PUBLIC_SUPA_ANON
@@ -20,10 +27,7 @@ function Rifa({params}) {
   //view
   useEffect(() => {
     if(openNum == true){
-      setView('hidden')
-    }
-    if(openNum == false) {
-      setView('block')
+      
     }
   },[openNum])
 
@@ -65,7 +69,7 @@ function Rifa({params}) {
           </div>
         ) : (
           <div>
-            <Numeros rifa={rifa} supabase={supabase} />
+            <Numeros rifa={rifa} supabase={supabase} setOpenNum={setOpenNum} openNum={openNum} />
           </div>
         )}
         

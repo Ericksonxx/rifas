@@ -220,7 +220,7 @@ function CrearRifa() {
                     />
                     {imageUrl && 
                                         <img
-                                        className='border-2 rounded border-[#9381ff]'
+                                         className='border-2 rounded border-[#9381ff]'
                                         style={{ margin: 'auto', width: '100%', height: '200px', objectFit: 'cover' }}
                                         src={imageUrl}
                                         alt='Foto Premio'
