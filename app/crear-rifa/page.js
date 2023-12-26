@@ -129,7 +129,7 @@ function CrearRifa() {
             if(error) {
                 console.log(error)
             } else {
-                router.push('/')
+                router.push('/user')
             }
         } else {
             alert('falta info')

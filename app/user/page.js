@@ -21,6 +21,7 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [rifas, setRifas] = useState()
   const [errorLogin, setErrorLogin] = useState(false)
+  const [deleteModal, setDeleteModal] = useState('hidden')
 
   //get user
   async function getUser() {
@@ -46,6 +47,7 @@ export default function Home() {
   useEffect(() => {
     getRifas()
   },[])
+
 
   
 
@@ -96,12 +98,39 @@ export default function Home() {
             {rifas &&
               <div>
                   {rifas.map((rifa,i) => {
+                      //delete
+                      async function deleteRifa() {
+                          const { error } = await supabase
+                          .from('rifas')
+                          .delete()
+                          .eq('id', rifa.id)
+                          if(error) {
+                              console.log(error)
+                          } else {
+                            getRifas()
+                          }
+                        }
+
                     return(
-                      <div key={i} className='border-[#9381ff] border-2 w-[80%] m-auto px-2 py-4 rounded shadow shadow-xl'>
+                      <div key={i} className='border-[#9381ff] border-2 w-[80%] m-auto pt-4 rounded shadow shadow-xl'>
                           <Link key={rifa.id} href="[rifaId]" as={`${rifa.id}` }>
-                              <p className='text-[#9381ff] font-semibold text-xl'>{rifa.titulo}</p>
-                              <img src={rifa.foto_premio} /> 
+                              <p className='px-2 text-[#9381ff] font-semibold text-xl'>{rifa.titulo}</p>
+                              <img className='px-2 my-2' src={rifa.foto_premio} /> 
                           </Link>
+                          <div className={`${deleteModal} w-screen h-screen bg-[#f8f7ff] bg-opacity-80 absolute top-0 left-0`}>
+                              <div className='fixed bg-[#9381ff] py-4 px-4 rounded shadow shadow-xl w-[90%] left-[5%] top-[30%]'>
+                                <p className='text-[#f8f7ff] font-semibold mb-6'>Confirma que quieres eliminar para siempre la rifa <u>{rifa.titulo}</u></p>
+                                <div className='grid grid-cols-2 gap-2'>
+                                  <button onClick={() => setDeleteModal('hidden')} className='border-[#f8f7ff] border-2 text-[#f8f7ff] py-2 rounded font-semibold'>Cancelar</button>
+                                  <button onClick={() => deleteRifa()} className='text-[#9381ff] bg-[#f8f7ff] py-2 rounded font-semibold'>Delete</button>
+                                </div>
+                              </div>
+                            </div>
+                          <div className='bg-[#9381ff] shadow py-2 py-2 rounded flex justify-end'>
+                            <button onClick={() => setDeleteModal('block')}>
+                              <img width="18" height="18" src="https://img.icons8.com/material-rounded/24/f8f7ff/filled-trash.png" alt="filled-trash"/>
+                            </button>
+                          </div>
                       </div>
                     )
                   })}
